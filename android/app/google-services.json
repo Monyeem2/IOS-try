@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "621350721481",
+    "project_id": "msgr-95fbe",
+    "storage_bucket": "msgr-95fbe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621350721481:android:a30215f6ff3c5aae647a18",
+        "android_client_info": {
+          "package_name": "com.osl.msgr_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "621350721481-leg0g3uqs1dj024k01i15n22gqlo49k5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVf7YRdp7AfnsGYwwE3nWVRIvTMU8pQQQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "621350721481-leg0g3uqs1dj024k01i15n22gqlo49k5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

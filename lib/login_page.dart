@@ -28,14 +28,12 @@ class _Login_pageState extends State<Login_page> {
       formState.save();
       try{
         UserCredential user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+        //
+        // SharedPreferences preferences = await SharedPreferences.getInstance();
+        // preferences.getString(email);
+        // preferences.getString(password);
+        //
 
-        SharedPreferences preferences = await SharedPreferences.getInstance();
-        preferences.setString(email, email);
-        preferences.setString(password,password);
-
-
-
-        bool userStatus = preferences.containsKey('uid');
 
         Navigator.push(context, MaterialPageRoute(builder: (context)=>ConversationPage(get_user: user)));
         print(email);
@@ -55,6 +53,12 @@ class _Login_pageState extends State<Login_page> {
     //     : print('Error of logIn function');
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    logIn();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,10 +163,15 @@ class _Login_pageState extends State<Login_page> {
 
                   FlatButton(
                     color: const Color(0XFFeb6e0e),
-                      onPressed: (){
+                      onPressed: ()async{
                         //Navigator.push(context, MaterialPageRoute(builder: (context)=>Chat_page()));
                         // Navigator.push(context, MaterialPageRoute(builder: (context)=>ConversationPage()));
                         logIn();
+
+                        // SharedPreferences pref = await SharedPreferences.getInstance();
+                        // pref.setString('email', email);
+                        // pref.setString('password', password);
+
                       },
                       child: const Text("Login",
                         style: TextStyle(

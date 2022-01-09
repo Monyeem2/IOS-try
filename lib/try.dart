@@ -15,7 +15,41 @@ class _ConversationPageState extends State<ConversationPage> {
 
   var sms;
   final _controller = TextEditingController();
+  late String result,result2;
+  String Name ='';
 
+
+
+
+  Future<void> username()async {
+    // var value = result.replaceFirst("@gmail.com", ".");
+    // result2 = result.substring(4);
+    // var str = '@gmail.com';
+    // //result2 = str.trim();
+    // //result2 = value.substring(0,value.indexOf('@'));
+    final User? _userCredential = FirebaseAuth.instance.currentUser;
+    if(_controller.text.isNotEmpty){
+      FirebaseFirestore.instance.collection("auth").doc(_userCredential!.uid).get().then((doc){
+        Name = doc.data()!['name'];
+      });
+    }
+
+
+  }
+
+  Future<void> sendData()async {
+    username();
+    final User? _userCredential = FirebaseAuth.instance.currentUser;
+    if(_controller.text.isNotEmpty){
+      FirebaseFirestore.instance.collection("msg").add({
+        'msg': sms,
+        'user': widget.get_user.user!.email.toString(),
+        'name': Name,
+        'createdAt' : FieldValue.serverTimestamp(),
+      });
+      _controller.clear();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +75,7 @@ class _ConversationPageState extends State<ConversationPage> {
         ),
         body: Container(
           child: Stack(
+
             children: [
               SingleChildScrollView(
                 reverse: true,
@@ -48,7 +83,7 @@ class _ConversationPageState extends State<ConversationPage> {
                   padding: EdgeInsets.only(left: 20, right: 20, top: 25),
                   alignment: Alignment.centerLeft,
                   child: StreamBuilder(
-                      stream: FirebaseFirestore.instance.collection('msg').snapshots(),
+                      stream: FirebaseFirestore.instance.collection('msg').orderBy('createdAt', descending: false).snapshots(),
                       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
                         if(!snapshot.hasData){
                           return const Center(
@@ -64,12 +99,15 @@ class _ConversationPageState extends State<ConversationPage> {
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(e['user'] ?? 'N/A txt',
+                                    Text(
+                                      result= e['name'] ?? 'N/A txt',
+                                      //Name,
                                       style: const TextStyle(
                                           fontSize: 10,
                                           color: Colors.grey
                                       ),
                                     ),
+
                                     // Container(
                                     //   decoration: BoxDecoration(
                                     //       color: Color(0xFFEEF1FF),
@@ -83,6 +121,11 @@ class _ConversationPageState extends State<ConversationPage> {
                                     //   ),
                                     //   ),
                                     // ),
+
+                                    // Text(
+                                    //   result2 = result.substring(0,result.indexOf('.')),
+                                    // ),
+
                                     Text(e['msg'] ?? 'N/A txt',
                                       style: const TextStyle(
                                         fontSize: 16,
@@ -145,11 +188,15 @@ class _ConversationPageState extends State<ConversationPage> {
                                       borderRadius: BorderRadius.circular(17)
                                   ),
                                   onPressed: (){
-                                    FirebaseFirestore.instance.collection("msg").add({
-                                      'msg': sms,
-                                      'user': widget.get_user.user!.email.toString(),
-                                    });
-                                    _controller.clear();
+                                    // if(_controller.text.isNotEmpty){
+                                    // FirebaseFirestore.instance.collection("msg").add({
+                                    //   'msg': sms,
+                                    //   'user': widget.get_user.user!.email.toString(),
+                                    //   'createdAt' : FieldValue.serverTimestamp(),
+                                    // });
+                                    // _controller.clear();
+                                    // }
+                                    sendData();
                                   },
                                   child: const Icon(Icons.send, color: Colors.white,))
                           ),
@@ -164,3 +211,4 @@ class _ConversationPageState extends State<ConversationPage> {
     );
   }
 }
+

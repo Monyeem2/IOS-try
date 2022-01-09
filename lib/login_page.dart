@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:msgr_app/chat_page.dart';
 import 'package:msgr_app/try.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login_page extends StatefulWidget {
   const Login_page({Key? key}) : super(key: key);
@@ -27,6 +28,15 @@ class _Login_pageState extends State<Login_page> {
       formState.save();
       try{
         UserCredential user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        preferences.setString(email, email);
+        preferences.setString(password,password);
+
+
+
+        bool userStatus = preferences.containsKey('uid');
+
         Navigator.push(context, MaterialPageRoute(builder: (context)=>ConversationPage(get_user: user)));
         print(email);
         print(password);

@@ -5,8 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ConversationPage extends StatefulWidget {
 
-  late UserCredential get_user;
-  ConversationPage({required this.get_user});
+  // late UserCredential get_user;
+  // ConversationPage({required this.get_user});
+
   @override
   _ConversationPageState createState() => _ConversationPageState();
 }
@@ -16,7 +17,7 @@ class _ConversationPageState extends State<ConversationPage> {
   var sms;
   final _controller = TextEditingController();
   late String result,result2;
-  String Name ='';
+  late String Name;
 
 
 
@@ -43,7 +44,7 @@ class _ConversationPageState extends State<ConversationPage> {
     if(_controller.text.isNotEmpty){
       FirebaseFirestore.instance.collection("msg").add({
         'msg': sms,
-        'user': widget.get_user.user!.email.toString(),
+        // 'user': widget.get_user.user!.email.toString(),
         'name': Name,
         'createdAt' : FieldValue.serverTimestamp(),
       });
@@ -51,13 +52,22 @@ class _ConversationPageState extends State<ConversationPage> {
     }
   }
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    username();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0XFFeb6e0e),
           automaticallyImplyLeading: false,
-          title: const Text("What's App",
+          title: const Text("uniConnect",
             style:  TextStyle(
               fontSize: 25,
               color: Colors.white,
@@ -74,77 +84,93 @@ class _ConversationPageState extends State<ConversationPage> {
           ],
         ),
         body: Container(
+          // decoration: const BoxDecoration(
+          //   image: DecorationImage(
+          //     image: AssetImage("images/spashscreen.PNG"),
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
           child: Stack(
 
             children: [
-              SingleChildScrollView(
-                reverse: true,
-                child: Container(
-                  padding: EdgeInsets.only(left: 20, right: 20, top: 25),
-                  alignment: Alignment.centerLeft,
-                  child: StreamBuilder(
-                      stream: FirebaseFirestore.instance.collection('msg').orderBy('createdAt', descending: false).snapshots(),
-                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
-                        if(!snapshot.hasData){
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: Color(0XFFeb6e0e),
-                            ),
-                          );
-                        }else{
-                          return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children:
-                              snapshot.data!.docs.map((e) {
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      result= e['name'] ?? 'N/A txt',
-                                      //Name,
-                                      style: const TextStyle(
-                                          fontSize: 10,
-                                          color: Colors.grey
-                                      ),
-                                    ),
-
-                                    // Container(
-                                    //   decoration: BoxDecoration(
-                                    //       color: Color(0xFFEEF1FF),
-                                    //       borderRadius: BorderRadius.circular(10)
-                                    //   ),
-                                    //   padding: EdgeInsets.all(10),
-                                    //   child: Text(e['sms'] ?? 'N/A txt',
-                                    //   style: TextStyle(
-                                    //     fontSize: 16,
-                                    //     fontWeight: FontWeight.bold,
-                                    //   ),
-                                    //   ),
-                                    // ),
-
-                                    // Text(
-                                    //   result2 = result.substring(0,result.indexOf('.')),
-                                    // ),
-
-                                    Text(e['msg'] ?? 'N/A txt',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text('\n')
-                                  ],
+              Container(
+                child: SingleChildScrollView(
+                  reverse: true,
+                  child: Container(
+                    padding: EdgeInsets.only(left: 20, right: 20, top: 25),
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      children: [
+                        StreamBuilder(
+                            stream: FirebaseFirestore.instance.collection('msg').orderBy('createdAt', descending: false).snapshots(),
+                            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+                              if(!snapshot.hasData){
+                                return const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Color(0XFFeb6e0e),
+                                  ),
                                 );
-                              }).toList()
-                          );
-                        }
-                      }
+                              }else{
+                                return Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children:
+                                    snapshot.data!.docs.map((e) {
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            result= e['name'] ?? 'N/A txt',
+                                            //Name,
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.black
+                                            ),
+                                          ),
+
+                                          // Container(
+                                          //   decoration: BoxDecoration(
+                                          //       color: Color(0xFFEEF1FF),
+                                          //       borderRadius: BorderRadius.circular(10)
+                                          //   ),
+                                          //   padding: EdgeInsets.all(10),
+                                          //   child: Text(e['sms'] ?? 'N/A txt',
+                                          //   style: TextStyle(
+                                          //     fontSize: 16,
+                                          //     fontWeight: FontWeight.bold,
+                                          //   ),
+                                          //   ),
+                                          // ),
+
+                                          // Text(
+                                          //   result2 = result.substring(0,result.indexOf('.')),
+                                          // ),
+
+                                          Text(e['msg'] ?? 'N/A txt',
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text('\n'),
+
+                                        ],
+                                      );
+                                    }).toList(),
+
+                                );
+                              }
+                            }
+                        ),
+                        SizedBox(height: 80,),
+                      ],
+                    ),
                   ),
                 ),
               ),
 
+
               Container(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   alignment: Alignment.bottomCenter,
                   child: Container(
                       padding: EdgeInsets.only(left: 15, right: 6, top: 4, bottom: 4),
@@ -204,10 +230,11 @@ class _ConversationPageState extends State<ConversationPage> {
                         ],
                       )
                   )
-              )
+              ),
             ],
           ),
-        )
+        ),
+
     );
   }
 }

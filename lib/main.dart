@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:msgr_app/splashscreen.dart';
 import 'package:firebase_core/firebase_core.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const Splashpage(),
+      //home:  Chatting('6PkeIbQ94tayqHJZOofjGuhm6mD2', 'receiverImage', '0q4oXixvj2brFNdb7XH7tp8u2bI2', '0q4oXixvj2brFNdb7XH7tp8u2bI2', 'userEmail', 'receiverEmail', 'userImage'),
     );
   }
 }

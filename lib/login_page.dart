@@ -1,6 +1,9 @@
+// ignore_for_file: unnecessary_new
+
 import 'package:flutter/material.dart';
 import 'package:msgr_app/chat_page.dart';
-import 'package:msgr_app/try.dart';
+import 'package:msgr_app/contact_page.dart';
+import 'package:msgr_app/conversation_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,14 +38,90 @@ class _Login_pageState extends State<Login_page> {
         //
 
 
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>ConversationPage(get_user: user)));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>Contact_page(get_user: user)));
+        //Navigator.push(context, MaterialPageRoute(builder: (context)=>Chatting('6PkeIbQ94tayqHJZOofjGuhm6mD2', 'receiverImage', '0q4oXixvj2brFNdb7XH7tp8u2bI2', '0q4oXixvj2brFNdb7XH7tp8u2bI2', 'userEmail', 'receiverEmail', 'userImage'),));
         print(email);
         print(password);
         print(user);
 
 
       }catch(e){
-        print(e);
+        switch(e){
+
+          case 'There is no user record corresponding to this identifier. The user may have been deleted.':
+          //errorType = authProblems.UserNotFound;
+            showDialog(context: context, builder: (BuildContext context) {
+              return new AlertDialog(
+                title:  const Text("Authentication Error"),
+                content:  const Text("User Not Found. Contact with Shapla City Limited"),
+                actions: [
+                  FlatButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    child: const Text("OK"),
+                  ),
+                ],
+                scrollable: true,
+              );
+            });
+            break;
+          case 'The password is invalid or the user does not have a password.':
+          //errorType = authProblems.PasswordNotValid;
+            showDialog(context: context, builder: (BuildContext context) {
+              return new AlertDialog(
+                title: const Text("Authentication Error"),
+                content: const Text("Password is not correct"),
+                actions: [
+                  FlatButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    child: const Text("OK"),
+                  ),
+                ],
+                scrollable: true,
+              );
+            });
+            break;
+          case 'A network error (such as timeout, interrupted connection or unreachable host) has occurred.':
+          // errorType = authProblems.NetworkError;
+            showDialog(context: context, builder: (BuildContext context) {
+              return new AlertDialog(
+                title: const Text("Network Error"),
+                content: const Text("Active your internet connection"),
+                actions: [
+                  FlatButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    child: const Text("OK"),
+                  ),
+                ],
+                scrollable: true,
+              );
+            });
+            break;
+          default:
+            showDialog(context: context, builder: (BuildContext context) {
+              return new AlertDialog(
+                title: const Text("Error"),
+                content: Text("'Case ${e} is not yet implemented'"),
+                actions: [
+                  FlatButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    child: const Text("OK"),
+                  ),
+                ],
+                scrollable: true,
+              );
+            });
+
+        }
+
+
       }
     }
 

@@ -4,7 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Chat_page extends StatefulWidget {
-  const Chat_page({Key? key}) : super(key: key);
+
+  late String name;
+
+  Chat_page(this.name);
 
   @override
   _Chat_pageState createState() => _Chat_pageState();
@@ -102,6 +105,7 @@ class _Chat_pageState extends State<Chat_page> {
                     alignment: Alignment.centerLeft,
                     child: Column(
                       children: [
+                        Text(widget.name),
                         StreamBuilder(
                             stream: FirebaseFirestore.instance.collection('msg').doc(_userCredential!.uid).collection("conversation").orderBy('createdAt', descending: false).snapshots(),
                             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){

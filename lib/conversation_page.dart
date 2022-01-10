@@ -84,12 +84,12 @@ class _ConversationPageState extends State<ConversationPage> {
           ],
         ),
         body: Container(
-          // decoration: const BoxDecoration(
-          //   image: DecorationImage(
-          //     image: AssetImage("images/spashscreen.PNG"),
-          //     fit: BoxFit.cover,
-          //   ),
-          // ),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("images/back.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
           child: Stack(
 
             children: [

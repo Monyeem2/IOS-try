@@ -53,7 +53,7 @@ class _Login_pageState extends State<Login_page> {
             showDialog(context: context, builder: (BuildContext context) {
               return new AlertDialog(
                 title:  const Text("Authentication Error"),
-                content:  const Text("User Not Found. Contact with Shapla City Limited"),
+                content:  const Text("User Not Found. Contact with OSL"),
                 actions: [
                   FlatButton(
                     onPressed: (){

@@ -17,7 +17,8 @@ class _ConversationPageState extends State<ConversationPage> {
   var sms;
   final _controller = TextEditingController();
   late String result,result2;
-  late String Name;
+  String Name='';
+
 
 
 
@@ -58,6 +59,7 @@ class _ConversationPageState extends State<ConversationPage> {
     // TODO: implement initState
     super.initState();
     username();
+
   }
 
 
@@ -84,12 +86,12 @@ class _ConversationPageState extends State<ConversationPage> {
           ],
         ),
         body: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("images/back.png"),
-              fit: BoxFit.cover,
-            ),
-          ),
+          // decoration: const BoxDecoration(
+          //   image: DecorationImage(
+          //     image: AssetImage("images/back.png"),
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
           child: Stack(
 
             children: [
@@ -145,10 +147,21 @@ class _ConversationPageState extends State<ConversationPage> {
                                           //   result2 = result.substring(0,result.indexOf('.')),
                                           // ),
 
-                                          Text(e['msg'] ?? 'N/A txt',
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
+                                          Container(
+
+                                            decoration: BoxDecoration(
+                                              color: Color(0XFFeb6e0e),
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(10.0),
+                                              child: Text(e['msg'] ?? 'N/A txt',
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                           Text('\n'),

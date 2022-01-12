@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:msgr_app/splashscreen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:msgr_app/try.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

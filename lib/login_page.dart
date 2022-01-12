@@ -21,6 +21,7 @@ class _Login_pageState extends State<Login_page> {
   var hide_password = true;
 
 
+
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
 
   Future<void> logIn() async {
@@ -181,6 +182,7 @@ class _Login_pageState extends State<Login_page> {
                                 hintStyle: TextStyle(fontSize: 15.0),
                               ),
 
+
                               onChanged: (input){
                                 email = input;
                               },
@@ -209,6 +211,7 @@ class _Login_pageState extends State<Login_page> {
                               onChanged: (input){
                                 password = input;
                               },
+
 
                               validator: (input){
                                 if(input!.length <6){
@@ -246,7 +249,6 @@ class _Login_pageState extends State<Login_page> {
                         //Navigator.push(context, MaterialPageRoute(builder: (context)=>Chat_page()));
                         // Navigator.push(context, MaterialPageRoute(builder: (context)=>ConversationPage()));
                         logIn();
-
                         // SharedPreferences pref = await SharedPreferences.getInstance();
                         // pref.setString('email', email);
                         // pref.setString('password', password);

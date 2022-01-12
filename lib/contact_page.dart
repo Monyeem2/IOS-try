@@ -32,12 +32,13 @@ class _Contact_pageState extends State<Contact_page> {
   // final User user = FirebaseAuth.instance.currentUser!;
   // final userid = user.uid;
 
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //   uid_catch();
-  // }
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,8 +117,9 @@ class _Contact_pageState extends State<Contact_page> {
                                   ),
                                 ),
                                 onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Chat_page(result)));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Chat_page(e['name'] )));
                                   //print(uid);
+                                  print(e['name'] );
                                 },
                               ),
 

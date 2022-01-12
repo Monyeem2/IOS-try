@@ -19,7 +19,7 @@ class _Chat_pageState extends State<Chat_page> {
   var sms;
   final _controller = TextEditingController();
   late String result,result2;
-  late String Name;
+  late String Nametest = '';
 
   final User? _userCredential = FirebaseAuth.instance.currentUser;
 
@@ -34,7 +34,7 @@ class _Chat_pageState extends State<Chat_page> {
     final User? _userCredential = FirebaseAuth.instance.currentUser;
     if(_controller.text.isNotEmpty){
       FirebaseFirestore.instance.collection("auth").doc(_userCredential!.uid).get().then((doc){
-        Name = doc.data()!['name'];
+        Nametest = doc.data()!['name'];
       });
     }
 
@@ -43,16 +43,18 @@ class _Chat_pageState extends State<Chat_page> {
 
   Future<void> sendData()async {
     username();
-    // final User? _userCredential = FirebaseAuth.instance.currentUser;
+    final User? _userCredential = FirebaseAuth.instance.currentUser;
     if(_controller.text.isNotEmpty){
-      FirebaseFirestore.instance.collection("msg").doc(_userCredential!.uid).collection('conversation').add({
+      FirebaseFirestore.instance.collection("msg").doc(_userCredential!.email!+widget.name).collection('conversation').add({
         'msg': sms,
         // 'user': widget.get_user.user!.email.toString(),
-        'name': Name,
+        'name': Nametest,
         'createdAt' : FieldValue.serverTimestamp(),
       });
       _controller.clear();
     }
+
+    print(widget.name);
   }
 
 
@@ -60,7 +62,7 @@ class _Chat_pageState extends State<Chat_page> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    username();
+    username().whenComplete(() => Nametest);
   }
 
 
@@ -84,7 +86,7 @@ class _Chat_pageState extends State<Chat_page> {
                 Navigator.pop(context);
               },
             ),
-            SizedBox(width: 20,),
+            const SizedBox(width: 20,),
           ],
         ),
         body: Container(
@@ -107,7 +109,7 @@ class _Chat_pageState extends State<Chat_page> {
                       children: [
                         Text(widget.name),
                         StreamBuilder(
-                            stream: FirebaseFirestore.instance.collection('msg').doc(_userCredential!.uid).collection("conversation").orderBy('createdAt', descending: false).snapshots(),
+                            stream: FirebaseFirestore.instance.collection('msg').doc(_userCredential!.email!+widget.name).collection("conversation").orderBy('createdAt', descending: false).snapshots(),
                             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
                               if(!snapshot.hasData){
                                 return const Center(

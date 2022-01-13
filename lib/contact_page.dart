@@ -33,11 +33,29 @@ class _Contact_pageState extends State<Contact_page> {
   // final userid = user.uid;
 
 
+  late String sendername = '';
+
+  final User? _userCredential = FirebaseAuth.instance.currentUser;
+
+
+
+  Future<void> username()async {
+    final User? _userCredential = FirebaseAuth.instance.currentUser;
+
+    FirebaseFirestore.instance.collection("auth").doc(_userCredential!.uid).get().then((doc){
+      sendername = doc.data()!['name'];
+    });
+
+
+
+  }
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    username().whenComplete(() => sendername);
   }
 
   @override
@@ -117,9 +135,11 @@ class _Contact_pageState extends State<Contact_page> {
                                   ),
                                 ),
                                 onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Chat_page(e['name'] )));
+                                  username();
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> Chat_page(e['name'],sendername )));
                                   //print(uid);
-                                  print(e['name'] );
+                                  print('receiver'+e['name'] );
+                                  print('sender'+sendername);
                                 },
                               ),
 

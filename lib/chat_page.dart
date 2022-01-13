@@ -5,9 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Chat_page extends StatefulWidget {
 
-  late String name;
+  late String receivername,sendername;
 
-  Chat_page(this.name);
+  Chat_page(this.receivername,this.sendername);
 
   @override
   _Chat_pageState createState() => _Chat_pageState();
@@ -18,43 +18,59 @@ class _Chat_pageState extends State<Chat_page> {
 
   var sms;
   final _controller = TextEditingController();
-  late String result,result2;
-  late String Nametest = '';
-
-  final User? _userCredential = FirebaseAuth.instance.currentUser;
-
-
-
-  Future<void> username()async {
-    // var value = result.replaceFirst("@gmail.com", ".");
-    // result2 = result.substring(4);
-    // var str = '@gmail.com';
-    // //result2 = str.trim();
-    // //result2 = value.substring(0,value.indexOf('@'));
-    final User? _userCredential = FirebaseAuth.instance.currentUser;
-    if(_controller.text.isNotEmpty){
-      FirebaseFirestore.instance.collection("auth").doc(_userCredential!.uid).get().then((doc){
-        Nametest = doc.data()!['name'];
-      });
-    }
-
-
-  }
+  late String result,result2,chatRoomId;
+  // late String sendername = '';
+  //
+  // final User? _userCredential = FirebaseAuth.instance.currentUser;
+  //
+  //
+  //
+  // Future<void> username()async {
+  //   final User? _userCredential = FirebaseAuth.instance.currentUser;
+  //   if(_controller.text.isNotEmpty){
+  //     FirebaseFirestore.instance.collection("auth").doc(_userCredential!.uid).get().then((doc){
+  //       sendername = doc.data()!['name'];
+  //     });
+  //   }
+  //
+  //
+  // }
 
   Future<void> sendData()async {
-    username();
+    // username();
     final User? _userCredential = FirebaseAuth.instance.currentUser;
+    // print(widget.sendername+(widget.receivername));
+    //
+    // print(widget.sendername.compareTo(widget.receivername));
+
+
     if(_controller.text.isNotEmpty){
-      FirebaseFirestore.instance.collection("msg").doc(_userCredential!.email!+widget.name).collection('conversation').add({
+      FirebaseFirestore.instance.collection("msg").doc(chatRoomId).collection('conversation').add({
         'msg': sms,
         // 'user': widget.get_user.user!.email.toString(),
-        'name': Nametest,
+        'name': widget.sendername,
         'createdAt' : FieldValue.serverTimestamp(),
       });
       _controller.clear();
+
+
     }
 
-    print(widget.name);
+    print('recever'+widget.receivername);
+    print('sender'+widget.sendername);
+  }
+
+
+  getMyInfo() async {
+    chatRoomId = getChatRoomId(widget.sendername, widget.receivername);
+  }
+
+  getChatRoomId(String a, String b) {
+    if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
+      return "$b\_$a";
+    } else {
+      return "$a\_$b";
+    }
   }
 
 
@@ -62,7 +78,7 @@ class _Chat_pageState extends State<Chat_page> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    username().whenComplete(() => Nametest);
+    getMyInfo().whenComplete(() => chatRoomId);
   }
 
 
@@ -73,8 +89,8 @@ class _Chat_pageState extends State<Chat_page> {
         appBar: AppBar(
           backgroundColor: const Color(0XFFeb6e0e),
           automaticallyImplyLeading: false,
-          title: const Text("uniConnect",
-            style:  TextStyle(
+          title: Text(widget.receivername,
+            style:  const TextStyle(
               fontSize: 25,
               color: Colors.white,
             ),
@@ -107,9 +123,9 @@ class _Chat_pageState extends State<Chat_page> {
                     alignment: Alignment.centerLeft,
                     child: Column(
                       children: [
-                        Text(widget.name),
+                        //Text(widget.receivername),
                         StreamBuilder(
-                            stream: FirebaseFirestore.instance.collection('msg').doc(_userCredential!.email!+widget.name).collection("conversation").orderBy('createdAt', descending: false).snapshots(),
+                            stream: FirebaseFirestore.instance.collection('msg').doc(chatRoomId).collection("conversation").orderBy('createdAt', descending: false).snapshots(),
                             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
                               if(!snapshot.hasData){
                                 return const Center(
@@ -230,6 +246,7 @@ class _Chat_pageState extends State<Chat_page> {
                                     // _controller.clear();
                                     // }
                                     sendData();
+                                    print('chatroom'+chatRoomId);
                                   },
                                   child: const Icon(Icons.send, color: Colors.white,))
                           ),
